@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        NODEJS_HOME = tool name: 'NodeJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+        DIRECTORY_PATH = "D:\753\Project-753"
+        TESTING_ENVIRONMENT = "testing_environment"
+        PRODUCTION_ENVIRONMENT = "Prashanth"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run start'
+                echo "Fetching the source code from the directory path specified by the environment variable: ${DIRECTORY_PATH}"
+                echo "Compiling the code and generating any necessary artifacts"
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+                echo "Running unit tests"
+                echo "Running integration tests"
+            }
+        }
+        stage('Code Quality Check') {
+            steps {
+                echo "Checking the quality of the code"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Deploying the application to a testing environment specified by the environment variable: ${TESTING_ENVIRONMENT}"
+            }
+        }
+        stage('Approval') {
+            steps {
+                echo "Waiting for manual approval..."
+                script {
+                    sleep(10)
+                }
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploying the code to the production environment: ${PRODUCTION_ENVIRONMENT}"
+            }
+        }
+    }
+}
