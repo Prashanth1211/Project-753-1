@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        DIRECTORY_PATH = "D:\753\Project-753-1"
         TESTING_ENVIRONMENT = "testing_environment"
         PRODUCTION_ENVIRONMENT = "Prashanth"
     }
