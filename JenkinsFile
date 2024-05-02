@@ -55,7 +55,7 @@ pipeline {
         success {
             emailext body: "Pipeline succeeded. See attachment for logs.",
                      subject: "Pipeline Success",
-                     to: "rprashanth1211@gamil.com",
+                     to: "rprashanth1211@gmail.com",
                      attachLog: true
         }
         failure {
