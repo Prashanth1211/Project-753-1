@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        NODEJS_HOME = tool name: 'NodeJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        DIRECTORY_PATH = "D:\753\Project-753"
+        DIRECTORY_PATH = "D:\753\Project-753-1"
         TESTING_ENVIRONMENT = "testing_environment"
         PRODUCTION_ENVIRONMENT = "Prashanth"
     }
@@ -11,41 +10,61 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'npm install'
-                sh 'npm run start'
-                echo "Fetching the source code from the directory path specified by the environment variable: ${DIRECTORY_PATH}"
-                echo "Compiling the code and generating any necessary artifacts"
+                echo 'Building the code with Maven'
             }
         }
-        stage('Test') {
+
+        stage('Unit and Integration Tests') {
             steps {
-                sh 'npm test'
-                echo "Running unit tests"
-                echo "Running integration tests"
+                echo 'Running unit tests with JUnit'
+                echo 'Running integration tests with Selenium'
             }
         }
-        stage('Code Quality Check') {
+
+        stage('Code Analysis') {
             steps {
-                echo "Checking the quality of the code"
+                echo 'Performing code analysis with Jenkins Plugins'
             }
         }
-        stage('Deploy') {
+
+        stage('Security Scan') {
             steps {
-                echo "Deploying the application to a testing environment specified by the environment variable: ${TESTING_ENVIRONMENT}"
+                echo 'Performing security scan with SonarQube'
             }
         }
-        stage('Approval') {
+
+        stage('Deploy to Staging') {
             steps {
-                echo "Waiting for manual approval..."
-                script {
-                    sleep(10)
-                }
+                echo 'Deploying to staging server (e.g., AWS EC2 instance)'
             }
         }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Running integration tests on staging environment'
+            }
+        }
+
         stage('Deploy to Production') {
             steps {
-                echo "Deploying the code to the production environment: ${PRODUCTION_ENVIRONMENT}"
+                echo 'Deploying to production server (e.g., AWS EC2 instance)'
             }
+        }
+    }
+
+    post {
+        success {
+            emailext body: "Pipeline succeeded. See attachment for logs.",
+                     subject: "Pipeline Success",
+                     to: "rprashanth1211@gamil.com",
+                     attachLog: true
+        }
+        failure {
+            // Send failure notification email
+            emailext body: "Pipeline failed. See attachment for logs.",
+                     subject: "Pipeline Failure",
+                     to: "rprashanth1211@gmail.com",
+                     attachLog: true
         }
     }
 }
