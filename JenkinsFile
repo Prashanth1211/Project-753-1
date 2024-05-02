@@ -106,10 +106,11 @@ pipeline {
             }
         }
     }
+}
 
     def sendEmail(String status) {
     emailext body: "Pipeline Status: ${status}",
              subject: "Pipeline ${status}",
              to: "bjamunarani@gmail.com"
 }
-}
+
