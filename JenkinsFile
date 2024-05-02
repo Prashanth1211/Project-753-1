@@ -11,6 +11,14 @@ pipeline {
             steps {
                 echo 'Building the code with Maven'
             }
+             post {
+                success {
+                    sendEmail('Build Successful')
+                }
+                failure {
+                    sendEmail('Build Failed')
+                }
+            }
         }
 
         stage('Unit and Integration Tests') {
@@ -18,11 +26,27 @@ pipeline {
                 echo 'Running unit tests with JUnit'
                 echo 'Running integration tests with Selenium'
             }
+             post {
+                success {
+                    sendEmail('Build Successful')
+                }
+                failure {
+                    sendEmail('Build Failed')
+                }
+            }
         }
 
         stage('Code Analysis') {
             steps {
                 echo 'Performing code analysis with Jenkins Plugins'
+            }
+             post {
+                success {
+                    sendEmail('Build Successful')
+                }
+                failure {
+                    sendEmail('Build Failed')
+                }
             }
         }
 
@@ -30,11 +54,27 @@ pipeline {
             steps {
                 echo 'Performing security scan with SonarQube'
             }
+             post {
+                success {
+                    sendEmail('Build Successful')
+                }
+                failure {
+                    sendEmail('Build Failed')
+                }
+            }
         }
 
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to staging server (e.g., AWS EC2 instance)'
+            }
+             post {
+                success {
+                    sendEmail('Build Successful')
+                }
+                failure {
+                    sendEmail('Build Failed')
+                }
             }
         }
 
@@ -42,28 +82,34 @@ pipeline {
             steps {
                 echo 'Running integration tests on staging environment'
             }
+             post {
+                success {
+                    sendEmail('Build Successful')
+                }
+                failure {
+                    sendEmail('Build Failed')
+                }
+            }
         }
 
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to production server (e.g., AWS EC2 instance)'
             }
+             post {
+                success {
+                    sendEmail('Build Successful')
+                }
+                failure {
+                    sendEmail('Build Failed')
+                }
+            }
         }
     }
 
-    post {
-        success {
-            emailext body: "Pipeline succeeded. See attachment for logs.",
-                     subject: "Pipeline Success",
-                     to: "bjamunarani@gmail.com",
-                     attachLog: true
-        }
-        failure {
-            // Send failure notification email
-            emailext body: "Pipeline failed. See attachment for logs.",
-                     subject: "Pipeline Failure",
-                     to: "bjamunarani@gmail.com",
-                     attachLog: true
-        }
-    }
+    def sendEmail(String status) {
+    emailext body: "Pipeline Stage: ${env.STAGE_NAME}\nStatus: ${status}",
+             subject: "Pipeline Stage: ${env.STAGE_NAME} - ${status}",
+             to: "recipient@example.com"
+}
 }
