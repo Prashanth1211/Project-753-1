@@ -109,8 +109,8 @@ pipeline {
 }
 
     def sendEmail(String status) {
-    mail body: "Pipeline Status: ${status}",
-             subject: "Pipeline ${status}",
+    mail body: "Pipeline Stage: ${env.STAGE_NAME}\nStatus: ${status}",
+             subject: "Pipeline Stage: ${env.STAGE_NAME} - ${status}",
              to: "bjamunarani@gmail.com"
 }
 
